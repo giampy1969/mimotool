@@ -1,0 +1,151 @@
+Model {
+  Name			  "curve"
+  Version		  2.20
+  SimParamPage		  Solver
+  SampleTimeColors	  off
+  InvariantConstants	  off
+  WideVectorLines	  off
+  ShowLineWidths	  off
+  StartTime		  "0.0"
+  StopTime		  "999999"
+  Solver		  ode15s
+  RelTol		  "1e-3"
+  AbsTol		  "1e-3"
+  Refine		  "1"
+  MaxStep		  "0.1"
+  InitialStep		  "auto"
+  FixedStep		  "auto"
+  MaxOrder		  5
+  OutputOption		  RefineOutputTimes
+  OutputTimes		  "[]"
+  LoadExternalInput	  off
+  ExternalInput		  "[t, u]"
+  SaveTime		  off
+  TimeSaveName		  "tout"
+  SaveState		  off
+  StateSaveName		  "xout"
+  SaveOutput		  off
+  OutputSaveName	  "yout"
+  LoadInitialState	  off
+  InitialState		  "xInitial"
+  SaveFinalState	  off
+  FinalStateName	  "xFinal"
+  LimitMaxRows		  off
+  MaxRows		  "1000"
+  Decimation		  "1"
+  AlgebraicLoopMsg	  warning
+  MinStepSizeMsg	  warning
+  UnconnectedInputMsg	  warning
+  UnconnectedOutputMsg	  warning
+  UnconnectedLineMsg	  warning
+  ConsistencyChecking	  off
+  ZeroCross		  on
+  SimulationMode	  normal
+  RTWSystemTargetFile	  "grt.tlc"
+  RTWInlineParameters	  off
+  RTWPlaceOutputsASAP	  off
+  RTWRetainRTWFile	  off
+  RTWTemplateMakefile	  "grt_default_tmf"
+  RTWMakeCommand	  "make_rtw"
+  RTWGenerateCodeOnly	  off
+  ExtModeMexFile	  "ext_comm"
+  ExtModeBatchMode	  off
+  BlockDefaults {
+    Orientation		    right
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    NamePlacement	    normal
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+    ShowName		    on
+  }
+  AnnotationDefaults {
+    HorizontalAlignment	    center
+    VerticalAlignment	    middle
+    ForegroundColor	    black
+    BackgroundColor	    white
+    DropShadow		    off
+    FontName		    "Helvetica"
+    FontSize		    10
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  LineDefaults {
+    FontName		    "Helvetica"
+    FontSize		    9
+    FontWeight		    normal
+    FontAngle		    normal
+  }
+  System {
+    Name		    "curve"
+    Location		    [27, 414, 527, 553]
+    Open		    on
+    ToolBar		    on
+    StatusBar		    on
+    ScreenColor		    white
+    PaperOrientation	    landscape
+    PaperPositionMode	    auto
+    PaperType		    usletter
+    PaperUnits		    inches
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal Gen."
+      Position		      [65, 19, 100, 41]
+      WaveForm		      sine
+      Amplitude		      "6.000000"
+      Frequency		      "1.000000"
+      Units		      "rad/sec"
+    }
+    Block {
+      BlockType		      SignalGenerator
+      Name		      "Signal Gen.2"
+      Position		      [150, 44, 185, 66]
+      WaveForm		      sine
+      Amplitude		      "6.000000"
+      Frequency		      "4.500000"
+      Units		      "rad/sec"
+    }
+    Block {
+      BlockType		      TransportDelay
+      Name		      "Transport Delay2"
+      Position		      [245, 42, 280, 68]
+      DelayTime		      "0/4*pi"
+      InitialInput	      "0"
+      BufferSize	      "1024"
+    }
+    Block {
+      BlockType		      Reference
+      Name		      "XY Graph"
+      Ports		      [2, 0, 0, 0, 0]
+      Position		      [345, 17, 390, 68]
+      SourceBlock	      "simulink/Sinks/XY Graph"
+      SourceType	      "XY scope."
+      xmin		      "-10"
+      xmax		      "10"
+      ymin		      "-10"
+      ymax		      "10"
+      st		      ".1"
+    }
+    Line {
+      SrcBlock		      "Signal Gen."
+      SrcPort		      1
+      DstBlock		      "XY Graph"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Signal Gen.2"
+      SrcPort		      1
+      DstBlock		      "Transport Delay2"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Transport Delay2"
+      SrcPort		      1
+      DstBlock		      "XY Graph"
+      DstPort		      2
+    }
+  }
+}
