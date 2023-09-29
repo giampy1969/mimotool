@@ -3,8 +3,9 @@ App for analysis and synthesis of multi-input multi-output control systems
 
 [![View mimotool on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/1047-mimotool)
 
-MIMO Tool is a toolbox for MATLAB&reg; (it works fine in every version from 5.3 until 7.8) developed with the aim to offering a complete toolbox for continuous time MIMO linear systems analysis and robust control synthesis.
 NOTE that the app has not been tried extensively in more than 10 years, so, you might find some glitches.
+
+MIMO Tool is a toolbox for MATLAB&reg; (it works fine in every version from 5.3 until 7.8) developed with the aim to offering a complete toolbox for continuous time MIMO linear systems analysis and robust control synthesis.
 
 The main idea behind this tool is allowing the user to perform, without leaving the visual interface, every step of the typical MIMO control system design:
 
