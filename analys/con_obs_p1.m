@@ -1,0 +1,136 @@
+function con_obs_p1(tipo)
+%CTRB with INPUT or OBSV from OUTPUT of poles window
+%
+%
+% Massimo Davini 15/05/99 --- revised 28/09/99
+
+% put delgraf instead of delete(findobj('tag','grafico'));
+% 25/may/02 Giampy
+
+global stack;
+
+if strcmp(tipo,'ctrbp')     str='CTRB';str1='with Inputs';
+elseif strcmp(tipo,'obsvp') str='OBSV';str1='from Outputs';
+else return;
+end;
+
+delgraf;
+set(stack.temp.handles,'visible','off');
+drawnow;
+
+set(gcf,'Name',sprintf(' MIMO Tool : ANALYSIS %s --> %s %s',stack.general.model,str,str1)); 
+
+%------------------------------------------------
+
+A=stack.general.A; B=stack.general.B;
+C=stack.general.C; D=stack.general.D;
+
+[no,ni]=size(D);
+[ns,ns]=size(A);
+poli=eig(A);
+
+cv_ov=stack.temp.gramians;
+%------------------------------------------------
+
+% enlarge text if java machine is running
+jsz=stack.general.javasize;
+
+textsize=jsz+0.7;
+c(1)=uicontrol('style','text','units','normalized','position',[0.05 0.9 0.1 0.05],...
+   'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+   'backgroundcolor',[1 1 0],'Horizontalalignment','left');
+
+if strcmp(str,'CTRB') 
+   limite=ni;
+   set(c(1),'string',' Inputs');
+   str0='In';
+   str='Poles and their Controllability';
+   str1='Ctrb';   
+elseif strcmp(str,'OBSV') 
+   limite=no;
+   set(c(1),'string','Outputs');
+   str0='Out';
+   str='Poles and their Observability';
+   str1='Obsv';
+end;
+
+for i=1:limite
+  c(i+1) = uicontrol('style','checkbox','unit','normalized',...
+         'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+         'position',[0.05 0.83-(i-1)*0.07 0.1 0.05],...
+         'backgroundcolor',[.6 .7 .9],'Horizontalalignment','center','value',1,...
+         'string',sprintf('%s%u',str0,i),'tag',sprintf('check_%u',i));
+end;
+
+c(2+limite)=uicontrol('style','push','unit','normalized','position',[0.17 0.85 0.08 0.1],...
+   'fontunits','normalized','fontsize',0.35+jsz/4,'fontweight','bold',...
+   'Horizontalalignment','center','string','OK',...
+   'TooltipString','Accept the selected items',...
+   'callback',sprintf('con_obs_p2(''%s'')',tipo));
+
+if ns<11  lun=ns; pos=1;
+else      lun=10; pos=0;
+end;
+
+if ns==lun x=0.1;else x=0;end;
+c(3+limite)=uicontrol('style','text','units','normalized',...
+   'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+   'position',[0.27+0.36*pos-x 0.9 0.32+x+abs(x-.1)*3.6 0.05],...
+   'backgroundcolor',[1 1 0],'Horizontalalignment','center',...
+   'string',str);
+
+for i=1:lun
+   P(i)=uicontrol('style','text','units','normalized',...
+      'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+      'position',[0.27+0.36*pos-x 0.83-(i-1)*0.07 0.2 0.05],...
+      'backgroundcolor',[1 1 1],'tag',sprintf('P_%u',i));
+
+   CO(i)=uicontrol('style','text','units','normalized',...
+      'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+      'position',[0.49+0.36*pos-x 0.83-(i-1)*0.07 0.1+x 0.05],...
+      'backgroundcolor',[1 1 1],'tag',sprintf('CO_%u',i));
+end;    
+
+if length(poli)>10
+  for i=1:length(poli)-10
+     P(i+10)=uicontrol('style','text','units','normalized',...
+        'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+        'position',[0.27+0.36-x 0.83-(i-1)*0.07 0.2 0.05],...
+        'backgroundcolor',[1 1 1],'tag',sprintf('P_%u',i+10));
+
+     CO(i+10)=uicontrol('style','text','units','normalized',...
+        'fontunits','normalized','fontsize',textsize,'fontweight','bold',...
+        'position',[0.49+0.36-x 0.83-(i-1)*0.07 0.1+x 0.05],...
+        'backgroundcolor',[1 1 1],'tag',sprintf('CO_%u',i+10));
+  end;    
+end;
+
+c(4+limite)=uicontrol('style','push',...
+   'unit','normalized','position',[0.05 0.05 0.14 0.12],...
+   'fontunits','normalized','fontsize',.35,'fontweight','bold',...
+   'string','BACK','Horizontalalignment','center',...
+   'TooltipString','Back to the previous window',...
+   'callback',sprintf('back_ana(''con_obs'',%u);',length(stack.temp.handles)));
+   
+c(5+limite)=uicontrol('style','push',...
+   'unit','normalized','position',[0.2 0.05 0.14 0.12],...
+   'fontunits','normalized','fontsize',0.35,'fontweight','bold',...
+   'string','CLOSE','Horizontalalignment','center',...
+   'TooltipString','Back to the main ANALYSIS window',...
+   'callback','back_ana(''ana0'',[],''gramians'');');
+
+c(6+limite)=uicontrol('style','frame','units','normalized',...
+   'position',[0.39 0.05 0.56 0.12],'backgroundcolor',[1 1 1]);
+
+c(7+limite)=uicontrol('style','text','units','normalized',...
+   'fontunits','normalized','fontsize',0.35+jsz/2,'fontweight','bold',...
+   'position',[0.4 0.07 0.54 0.09],'backgroundcolor',[1 1 1],...
+   'HorizontalAlignment','center','tag','testo',...
+   'foregroundcolor','blue');
+
+stack.temp.handles=[stack.temp.handles,c,P,CO];
+
+drawnow;
+
+con_obs_p2(tipo);
+
