@@ -1,0 +1,24 @@
+<productinfo>
+
+<matlabrelease>12.1</matlabrelease>
+<name>MIMOTool</name>
+<type>matlab</type>
+<icon>$toolbox/matlab/general/matlabicon.gif</icon>
+
+<list>
+
+<listitem>
+<label>Help</label>
+<callback>doc mimotool/</callback>
+<icon>$toolbox/matlab/general/bookicon.gif</icon>
+</listitem>
+
+<listitem>
+<label>Launch MIMOTool</label>
+<callback>mimotool</callback>
+<icon>$toolbox/matlab/general/figureicon.gif</icon>
+</listitem>
+
+</list>
+
+</productinfo>
